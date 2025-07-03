@@ -15,6 +15,7 @@ interface AdjustableCardFeatureConfig {
     type: string;
     [key: string]: unknown;
   };
+  style?: string | { [key: string]: string | null };
 }
 
 /**
@@ -55,6 +56,7 @@ extends HTMLElement implements LovelaceCardFeature {
       subfeature: {
         type: "",
       },
+      style: {},
     };
   }
 
@@ -70,6 +72,15 @@ extends HTMLElement implements LovelaceCardFeature {
     else if (this.firstChild && "setConfig" in this.firstChild) {
       // Subfeature exists and not changed. Pass subfeature config to it.
       (this.firstChild as LovelaceCardFeature).setConfig(config.subfeature);
+    }
+
+    if (typeof config.style === "string") {
+      this.style = config.style;
+    }
+    else if (config.style && typeof config.style === "object") {
+      for (const [name, value] of Object.entries(config.style)) {
+        this.style.setProperty(name, value);
+      }
     }
 
     this._config = config;
