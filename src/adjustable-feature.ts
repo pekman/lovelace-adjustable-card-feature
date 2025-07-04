@@ -44,12 +44,40 @@ extends HTMLElement implements LovelaceCardFeature {
   declare public readonly firstChild: LovelaceCardFeature | null;
 
   public static getStubConfig(): AdjustableCardFeatureConfig {
+    function dedent([s]: Iterable<string>) {
+      const indent = /^[ \t]+/m.exec(s)?.[0];
+      return s.replaceAll(`\n${indent}`, "\n").trim();
+    }
     return {
       type: "custom:adjustable-card-feature",
       subfeature: {
         type: "",
-      },
-      style: {},
+        NOTE: dedent`
+          Configuration for the wrapped feature
+          goes here.
+
+          Suggested steps:
+          1. Add and configure a card feature in
+             the graphical card configuration as
+             usual.
+          2. Edit card configuration as YAML, and
+             move the new feature's configuration
+             here. (Don't include the "-".)
+          3. Add styles below.
+        `,
+      } as LovelaceCardFeatureConfig,
+      style: dedent`
+        /*
+         * Put CSS declarations here.
+         * No selectors, just property-value pairs,
+         * including variable declarations.
+         */
+
+        /* Examples: */
+        /* --feature-height: 84px; */
+        /* --feature-button-spacing: 6px; */
+        /* --feature-color: #4a412a; */
+      `,
     };
   }
 
