@@ -1,20 +1,11 @@
-// Adapted from HA frontend's src/panels/lovelace/types.ts
-interface LovelaceCardFeature extends HTMLElement {
-  hass?: unknown;
-  /** @deprecated Use `context` instead */
-  stateObj?: unknown;
-  context?: unknown;
-  setConfig(config: object): void;
-  color?: string;
-  position?: unknown;
-}
+import type {
+  LovelaceCardFeature,
+  LovelaceCardFeatureConfig,
+} from "./ha-types";
 
-interface AdjustableCardFeatureConfig {
+interface AdjustableCardFeatureConfig extends LovelaceCardFeatureConfig {
   type: "custom:adjustable-card-feature";
-  subfeature: {
-    type: string;
-    [key: string]: unknown;
-  };
+  subfeature: LovelaceCardFeatureConfig;
   style?: string | { [key: string]: string | null };
 }
 
@@ -40,15 +31,17 @@ function reflectToSubfeature(target: unknown, name: string) {
   });
 }
 
-export class AdjustableCardFeature
+class AdjustableCardFeature
 extends HTMLElement implements LovelaceCardFeature {
-  @reflectToSubfeature public hass?: unknown;
-  @reflectToSubfeature public context?: unknown;
-  @reflectToSubfeature public color?: string;
-  @reflectToSubfeature public position?: unknown;
-  @reflectToSubfeature public stateObj?: unknown;
+  @reflectToSubfeature public hass?: LovelaceCardFeature["hass"];
+  @reflectToSubfeature public context?: LovelaceCardFeature["context"];
+  @reflectToSubfeature public color?: LovelaceCardFeature["color"];
+  @reflectToSubfeature public position?: LovelaceCardFeature["position"];
+  @reflectToSubfeature public stateObj?: LovelaceCardFeature["stateObj"];
 
   private _config?: AdjustableCardFeatureConfig;
+
+  declare public readonly firstChild: LovelaceCardFeature | null;
 
   public static getStubConfig(): AdjustableCardFeatureConfig {
     return {
@@ -69,9 +62,9 @@ extends HTMLElement implements LovelaceCardFeature {
       // Subfeature type changed or initially set. Create new subfeature.
       this._changeSubfeature(config.subfeature);
     }
-    else if (this.firstChild && "setConfig" in this.firstChild) {
+    else if (this.firstChild) {
       // Subfeature exists and not changed. Pass subfeature config to it.
-      (this.firstChild as LovelaceCardFeature).setConfig(config.subfeature);
+      this.firstChild.setConfig(config.subfeature);
     }
 
     if (typeof config.style === "string") {
@@ -97,7 +90,7 @@ extends HTMLElement implements LovelaceCardFeature {
     if (match) {  // custom feature
       elementName = match[1];
       if (window.customCardFeatures?.every((feature) =>
-            "type" in feature && feature.type !== elementName)
+            feature.type !== elementName)
       ) {
         throw new Error(`Unknown custom feature: ${elementName}`);
       }

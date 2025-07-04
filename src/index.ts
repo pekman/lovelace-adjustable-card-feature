@@ -1,12 +1,6 @@
 import { version } from "../package.json";
 import "./adjustable-feature";
-
-declare global {
-  interface Window {
-    customCards?: object[],
-    customCardFeatures?: object[],
-  }
-}
+import "./ha-types";
 
 (window.customCardFeatures ??= []).push({
   type: "adjustable-card-feature",
