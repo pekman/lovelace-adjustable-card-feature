@@ -1,7 +1,7 @@
 {
-  "name": "homeassistant-adjustable-card-feature",
+  "name": "lovelace-adjustable-card-feature",
   "version": "0.0.1",
-  "description": "Allows syle changes for Home Assistant card features",
+  "description": "Adjust Home Assistant UI card feature styling",
   "main": "index.js",
   "scripts": {
     "build": "rollup --config",
