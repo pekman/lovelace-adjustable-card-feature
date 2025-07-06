@@ -7,6 +7,7 @@ can change a feature's size or color.
 Implemented as a Home Assistant card feature that wraps another card feature as
 a subfeature and sets style declarations for it.
 
+![Example](example.png)
 
 
 Installation
@@ -67,6 +68,31 @@ Notable CSS variables to adjust:
 - `--feature-height: 42px;`
 - `--feature-button-spacing: 12px;`
 - `--feature-color: #4a412a;`
+
+### Example ###
+
+To create a card like in the image above, start editing a dashboard, click "Add
+card", choose type "Manual", and enter the following:
+
+``` yaml
+type: tile
+name: Example tile card for a light with customized slider sizes
+entity: light.YOUR_LIGHT_ENTITY_that_supports_color_temp
+icon: mdi:lightbulb
+vertical: false
+hide_state: true
+features:
+  - type: custom:adjustable-card-feature
+    subfeature:
+      type: light-brightness
+    style: |-
+      --feature-height: 63px;
+  - type: custom:adjustable-card-feature
+    subfeature:
+      type: light-color-temp
+    style: |-
+      --feature-height: 24px;
+```
 
 
 [HACS]: https://www.hacs.xyz/
