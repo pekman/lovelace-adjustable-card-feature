@@ -4,32 +4,31 @@ Adjustable card features for Home Assistant
 Allows style customizations for Home Assistant card features. Most notably, you
 can change a feature's size or color.
 
-This is a Home Assistant card feature that wraps another card feature as a
-subfeature and sets style declarations for it.
+Implemented as a Home Assistant card feature that wraps another card feature as
+a subfeature and sets style declarations for it.
 
 
-Installing
-----------
+
+Installation
+------------
 
 ### Using [HACS][] ###
 
 Install from [custom repository][hacs-customrepo]. In HACS dashboard, open
-top-right menu, select *Custom repositories*, and enter the following:
+top-right menu, select "Custom repositories", and enter the following:
 
 - Repository: `https://github.com/pekman/lovelace-adjustable-card-feature.git`
 - Type: Dashboard
 
 ### Manually ###
 
-1. Run:
-   ``` sh
-   npm install
-   npm build
-   ```
+``` sh
+npm install
+npm run build
+```
 
-3. See [Home Assistant's documentation about registering
-   resources][hass-resources]. The file to copy and register is
-   `dist/adjustable-card-feature.js`.
+Copy and register the file `dist/adjustable-card-feature.js` according to
+[Home Assistant's documentation about registering resources][hass-resources].
 
 
 Configuration
@@ -37,22 +36,18 @@ Configuration
 
 Graphical configuration is not supported; only YAML configuration is possible.
 
-(This is because Home Assistant doesn't expose information about its own card
-features for custom dashboard items. This makes graphical subfeature
-configuration pretty much impossible.)
+Options:
 
-Configuration schema:
-``` yaml
-type: "custom:adjustable-card-feature",
-subfeature:
-  type: "CARD FEATURE TYPE"
-  # other settings for the subfeature
-style: |-
-  /* CSS declarations */
+| Name         | Type    | Description                               |
+|--------------|---------|-------------------------------------------|
+| `type`       | string  | `custom:adjustable-card-feature`          |
+| `subfeature` | mapping | Subfeature configuration; `type` required |
+| `style`      | string  | CSS declarations (no selectors)           |
 
-```
+`subfeature` should contain subfeature options as described in
+[Home Assistant documentation][hass-features].
 
-Suggested steps:
+Suggested steps for half-graphical configuration:
 
 1. Add and configure a card feature in the graphical card configuration as
    usual.
@@ -67,7 +62,7 @@ Suggested steps:
    declarations (no selectors), including variable declarations, which Home
    Assistant uses for a lot of styling.
 
-Notable variables to adjust:
+Notable CSS variables to adjust:
    
 - `--feature-height: 42px;`
 - `--feature-button-spacing: 12px;`
@@ -77,3 +72,4 @@ Notable variables to adjust:
 [HACS]: https://www.hacs.xyz/
 [hacs-customrepo]: https://hacs.xyz/docs/faq/custom_repositories/
 [hass-resources]: https://developers.home-assistant.io/docs/frontend/custom-ui/registering-resources
+[hass-features]: https://www.home-assistant.io/dashboards/features/
